@@ -109,7 +109,7 @@ export default function App(): JSX.Element {
     if (!hasShownWelcome) {
       const welcomeMessage: Message = {
         id: Date.now().toString(),
-        text: "**Please Note:** The Guru is not a therapist, counselor, or medical professional. The guidance offered comes from ancient texts and wisdom traditions, not modern therapeutic practice. For mental health concerns, please consult a qualified professional.\n\nSeek Wisdom, Not Advice\n\nWelcome to a space of reflection and ancient knowledge. Our Guru doesn't give advice but shares wisdom from sacred texts across traditions.",
+        text: "**Please Note:** The Guru is not a therapist, counselor, or medical professional. The guidance offered comes from ancient texts and wisdom traditions, not modern therapeutic practice. For mental health concerns, please consult a qualified professional.\n\nWelcome to a space of reflection and ancient knowledge. Seek Wisdom, Not Advice\n\nOur Guru doesn't give advice but shares wisdom from sacred texts across traditions.",
         isUser: false,
         role: 'assistant',
         timestamp: new Date().toISOString()
@@ -622,7 +622,7 @@ export default function App(): JSX.Element {
           >
             <MessageSquare className="h-6 w-6" />
           </button>
-          <h1 className="text-2xl font-bold text-gray-900 flex-1 text-center">Wisdom Keepers</h1>
+          <h1 className="text-2xl font-bold text-gray-900 flex-1 text-center">∞ Wisdom Keepers</h1>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 text-gray-600 hover:text-gray-900 rounded-full hover:bg-gray-900 dark:hover:bg-gray-900"
@@ -713,7 +713,7 @@ export default function App(): JSX.Element {
 
       {/* Menu Dropdown */}
       {isMenuOpen && (
-        <div className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${theme === 'dark' ? 'bg-black border border-gray-800' : 'bg-white border border-gray-200'} ring-1 ring-black ring-opacity-5`}>
+        <div ref={menuRef} className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${theme === 'dark' ? 'bg-black border border-gray-800' : 'bg-white border border-gray-200'} ring-1 ring-black ring-opacity-5`}>
           <div className="py-1" role="menu" aria-orientation="vertical">
           <button
             onClick={() => {
@@ -727,24 +727,25 @@ export default function App(): JSX.Element {
           </button>
           <button
             onClick={() => {
-                setActiveModal('privacy');
+              toggleTheme();
               setIsMenuOpen(false);
             }}
-              className={`block w-full text-left px-4 py-2 text-sm ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-100'}`}
-              role="menuitem"
+            className={`block w-full text-left px-4 py-2 text-sm ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-100'} flex items-center`}
+            role="menuitem"
           >
-              Privacy Policy
+            {theme === 'dark' ? (
+              <>
+                <Sun className="h-4 w-4 mr-2" />
+                Light Mode
+              </>
+            ) : (
+              <>
+                <Moon className="h-4 w-4 mr-2" />
+                Dark Mode
+              </>
+            )}
           </button>
-          <button
-            onClick={() => {
-                setActiveModal('terms');
-              setIsMenuOpen(false);
-            }}
-              className={`block w-full text-left px-4 py-2 text-sm ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-100'}`}
-              role="menuitem"
-            >
-              Terms of Service
-            </button>
+          {user ? (
             <button
               onClick={handleSignOut}
               className={`block w-full text-left px-4 py-2 text-sm ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-100'}`}
@@ -752,6 +753,18 @@ export default function App(): JSX.Element {
             >
               Sign Out
             </button>
+          ) : (
+            <button
+              onClick={() => {
+                setActiveModal('signin');
+                setIsMenuOpen(false);
+              }}
+              className={`block w-full text-left px-4 py-2 text-sm ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-100'}`}
+              role="menuitem"
+            >
+              Sign In
+            </button>
+          )}
           </div>
         </div>
       )}
@@ -796,43 +809,162 @@ export default function App(): JSX.Element {
                 {activeModal === 'about' && (
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>About SevaLife</h2>
+                      <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>About Us</h2>
                       <button
                         onClick={() => setActiveModal(null)}
                         className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
                       >
                         <X className="h-5 w-5" />
-          </button>
+                      </button>
                     </div>
                     <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                       <p>
-                        Welcome to SevaLife, a space where ancient wisdom meets modern technology. Our platform is designed to help you explore and reflect on timeless teachings from various wisdom traditions.
+                        At Wisdom Keepers, we serve as a digital sanctuary where ancient wisdom meets modern seekers. Our platform illuminates spiritual perspectives across traditions without prescribing a singular path or offering direct guidance.
                       </p>
                       <p>
-                        <strong>Our Approach:</strong>
-                        <ul className="list-disc pl-5 mt-2 space-y-2">
-                          <li>We don't give advice; we share wisdom from sacred texts</li>
-                          <li>Our responses are grounded in ancient knowledge and traditions</li>
-                          <li>We encourage reflection and personal growth</li>
-                          <li>We respect all spiritual and philosophical paths</li>
-                        </ul>
+                        <strong>Our Purpose</strong>
                       </p>
                       <p>
-                        <strong>Important Note:</strong> SevaLife is not a substitute for professional medical, psychological, or spiritual advice. We encourage you to consult qualified professionals for specific guidance in these areas.
+                        We believe that spirituality is deeply personal. Rather than positioning ourselves as authorities or gurus, we curate and share the diverse experiences, insights, and practices that have resonated with seekers throughout history and across cultures.
                       </p>
                       <p>
-                        <strong>Features:</strong>
-                        <ul className="list-disc pl-5 mt-2 space-y-2">
-                          <li>Voice note support for natural communication</li>
-                          <li>Dark/Light mode for comfortable reading</li>
-                          <li>Secure authentication system</li>
-                          <li>Chat history preservation</li>
-                        </ul>
+                        Our name "Wisdom Keepers" reflects our commitment to preserving and sharing timeless spiritual insights while honoring the many voices and traditions that have carried wisdom through generations.
                       </p>
-                      <p className="text-sm italic">
-                        Version 1.0.0 | © 2024 SevaLife
+                      <p>
+                        <strong>What We Offer</strong>
+                      </p>
+                      <p>
+                        Wisdom Keepers presents:
+                      </p>
+                      <ul className="list-disc pl-5 mt-2 space-y-2">
+                        <li>Curated collections of spiritual insights from diverse traditions</li>
+                        <li>Personal narratives that illustrate different approaches to spiritual growth</li>
+                        <li>Historical and contemporary examples of transformative practices</li>
+                        <li>A judgment-free space to explore various perspectives on consciousness, purpose, and connection</li>
+                      </ul>
+                      <p>
+                        <strong>Our Approach</strong>
+                      </p>
+                      <p>
+                        We don't claim to have answers. Instead, we offer possibilities through the words and experiences of others. Whether you're beginning your spiritual journey or have been walking a path for decades, we hope the reflections shared here might spark recognition, inspiration, or new avenues of exploration.
+                      </p>
+                      <p>
+                        Our platform exists not as a teacher but as a mirror - reflecting the multitude of ways humans have sought and found meaning throughout time.
+                      </p>
+                      <p>
+                        <strong>Join the Journey</strong>
+                      </p>
+                      <p>
+                        As you explore Wisdom Keepers, we invite you to approach each perspective with openness. Take what resonates, leave what doesn't, and know that the greatest spiritual wisdom often emerges from your own lived experience.
                       </p>
                     </div>
+                  </div>
+                )}
+                
+                {activeModal === 'chatHistory' && (
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>Chat History</h2>
+                      <button
+                        onClick={() => setActiveModal(null)}
+                        className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
+                    <div className={`space-y-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                      {isLoadingHistory ? (
+                        <p className="text-center">Loading chat history...</p>
+                      ) : historyMessages.length > 0 ? (
+                        <div className="max-h-96 overflow-y-auto">
+                          {historyMessages.map((message, index) => (
+                            <div 
+                              key={index}
+                              className={`p-3 mb-2 rounded-lg ${message.isUser ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200'} max-w-[80%] ${message.isUser ? 'ml-auto' : 'mr-auto'}`}
+                            >
+                              <p>{message.text}</p>
+                              <p className="text-xs opacity-70 mt-1">{new Date(message.timestamp).toLocaleString()}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-center">No chat history available yet.</p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {activeModal === 'signin' && (
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>
+                        {isSignUp ? 'Create Account' : 'Sign In'}
+                      </h2>
+                      <button
+                        onClick={() => setActiveModal(null)}
+                        className={`p-2 rounded-full ${theme === 'dark' ? 'hover:bg-gray-800' : 'hover:bg-gray-100'}`}
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
+                    
+                    <form onSubmit={handleAuth} className="space-y-4">
+                      {authError && <div className="mt-2">{authError}</div>}
+                      
+                      <div>
+                        <label 
+                          htmlFor="email" 
+                          className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
+                        >
+                          Email
+                        </label>
+                        <input
+                          id="email"
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          className={`mt-1 block w-full px-3 py-2 border ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label 
+                          htmlFor="password" 
+                          className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}
+                        >
+                          Password
+                        </label>
+                        <input
+                          id="password"
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          className={`mt-1 block w-full px-3 py-2 border ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                        />
+                      </div>
+                      
+                      <div className="flex justify-between">
+                        <button
+                          type="button"
+                          onClick={() => setIsSignUp(!isSignUp)}
+                          className={`text-sm ${theme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-500'}`}
+                        >
+                          {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
+                        </button>
+                      </div>
+                      
+                      <div>
+                        <button
+                          type="submit"
+                          disabled={isLoading}
+                          className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        >
+                          {isLoading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Sign In'}
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 )}
               </div>
